@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">New Quiz</h1>
+<form method="post" class="form">
+  <label>Title <input name="title" required></label>
+  {% for i in range(1,6) %}
+  <fieldset class="quiz-q">
+    <legend>Question {{ i }}</legend>
+    <label>Prompt <input name="q{{ i }}_prompt"></label>
+    <div class="grid-2">
+      <label>A <input name="q{{ i }}_a"></label>
+      <label>B <input name="q{{ i }}_b"></label>
+      <label>C <input name="q{{ i }}_c"></label>
+      <label>D <input name="q{{ i }}_d"></label>
+    </div>
+    <label>Correct
+      <select name="q{{ i }}_correct">
+        <option value="">--</option><option>A</option><option>B</option><option>C</option><option>D</option>
+      </select>
+    </label>
+  </fieldset>
+  {% endfor %}
+  <button class="btn" type="submit">Create Quiz</button>
+</form>
+{% endblock %}

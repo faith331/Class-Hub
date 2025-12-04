@@ -1,0 +1,17 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Assignments</h1>
+{% if current_user and current_user.role == 'teacher' %}
+  <p><a class="btn" href="{{ url_for('assignment_new') }}">+ New Assignment</a></p>
+{% endif %}
+<ul class="list">
+  {% for a in rows %}
+    <li class="list-item">
+      <div><a href="{{ url_for('assignment_detail', aid=a.id) }}"><strong>{{ a.title }}</strong></a></div>
+      <div class="muted">{{ a.created_at[:16].replace('T',' ') }}{% if a.due_date %} · due {{ a.due_date }}{% endif %}</div>
+      <p>{{ a.description }}</p>
+    </li>
+  {% else %}<li>No assignments yet.</li>{% endfor %}
+</ul>
+{% endblock %}

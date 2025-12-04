@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClassHub</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- Top line like screenshot -->
+  <header class="topbar">
+    <div class="container">
+      <nav class="tabs">
+        <a href="{{ url_for('index') }}" class="brand">ClassHub</a>
+        <a href="{{ url_for('announcements') }}">For Educators</a>
+        <a href="{{ url_for('assignments') }}">For Students</a>
+        <a href="{{ url_for('discussions') }}">Resources</a>
+        <a href="{{ url_for('quizzes') }}">Professional Development</a>
+        <!-- Contact removed as requested -->
+        <span class="spacer"></span>
+        {% if not current_user %}
+          <a href="{{ url_for('login') }}" class="link">Sign in</a>
+          <a href="{{ url_for('register') }}" class="btn small">Register</a>
+        {% else %}
+          <a href="{{ url_for('dashboard') }}" class="link">Dashboard</a>
+          <a href="{{ url_for('logout') }}" class="btn small outline">Logout</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for cat, msg in messages %}
+            <div class="flash {{ cat|default('info') }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <span>© {{ now.year }} ClassHub</span>
+  </footer>
+</body>
+</html>

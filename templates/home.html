@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1 class="hero-title">Find lessons, manage your class, and track progress</h1>
+  <form class="search">
+    <input placeholder="Enter keywords or select a browse option" aria-label="Search">
+    <button type="button">🔍</button>
+  </form>
+  <div class="hero-links">
+    <a class="chip" href="{{ url_for('announcements') }}">Digital Literacy</a>
+    <a class="chip" href="{{ url_for('assignments') }}">Assignments</a>
+    <a class="chip" href="{{ url_for('discussions') }}">Discussions</a>
+    <a class="chip" href="{{ url_for('quizzes') }}">Quizzes</a>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Latest Announcements</h2>
+    <ul class="list">
+      {% for a in announcements %}
+        <li><strong>{{ a.title }}</strong> — <span class="muted">{{ a.created_at[:10] }}</span></li>
+      {% else %}
+        <li>No announcements yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Get Started</h2>
+    {% if not current_user %}
+      <p>Create your free account to begin.</p>
+      <p>
+        <a class="btn" href="{{ url_for('register') }}">Register</a>
+        <a class="btn outline" href="{{ url_for('login') }}">Sign in</a>
+      </p>
+    {% else %}
+      <p>Welcome back, {{ current_user.name }}. Go to your <a href="{{ url_for('dashboard') }}">dashboard</a>.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

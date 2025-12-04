@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">{{ a.title }}</h1>
+<p class="muted">Created {{ a.created_at[:16].replace('T',' ') }}{% if a.due_date %} · Due {{ a.due_date }}{% endif %}</p>
+<p>{{ a.description }}</p>
+
+{% if current_user and current_user.role == 'student' %}
+<hr>
+<h2>Your Submission</h2>
+<form method="post" class="form">
+  <label>Content / Link
+    <textarea name="content" rows="5" placeholder="Paste your answer or link">{{ submission.content if submission else '' }}</textarea>
+  </label>
+  <button class="btn" type="submit">Save Submission</button>
+</form>
+{% if submission %}
+<p class="muted">Submitted at: {{ submission.submitted_at[:16].replace('T',' ') }}</p>
+{% if submission.score is not none %}<p><strong>Score:</strong> {{ submission.score }}%</p>{% endif %}
+{% if submission.feedback %}<p><strong>Feedback:</strong> {{ submission.feedback }}</p>{% endif %}
+{% endif %}
+{% endif %}
+
+{% if current_user and current_user.role == 'teacher' %}
+<hr>
+<h2>Student Submissions</h2>
+<ul class="list">
+  {% for s in subs %}
+  <li class="list-item">
+    <div><strong>{{ s.student_name }}</strong> · <span class="muted">{{ s.submitted_at[:16].replace('T',' ') }}</span></div>
+    <p>{{ s.content }}</p>
+    <form method="post" class="inline-form">
+      <input type="hidden" name="sid" value="{{ s.id }}">
+      <label>Score (%) <input name="score" type="number" min="0" max="100" step="1" value="{{ s.score if s.score is not none else '' }}"></label>
+      <label>Feedback <input name="feedback" value="{{ s.feedback or '' }}"></label>
+      <button class="btn" type="submit">Save Grade</button>
+    </form>
+  </li>
+  {% else %}<li>No submissions yet.</li>{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

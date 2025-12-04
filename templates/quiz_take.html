@@ -1,0 +1,34 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">{{ quiz.title }}</h1>
+{% if current_user and current_user.role == 'student' %}
+<form method="post" class="form">
+  {% for q in questions %}
+  <fieldset class="quiz-q">
+    <legend>{{ loop.index }}. {{ q.prompt }}</legend>
+    <label><input type="radio" name="q{{ q.id }}" value="A" required> A) {{ q.choice_a }}</label>
+    <label><input type="radio" name="q{{ q.id }}" value="B"> B) {{ q.choice_b }}</label>
+    <label><input type="radio" name="q{{ q.id }}" value="C"> C) {{ q.choice_c }}</label>
+    <label><input type="radio" name="q{{ q.id }}" value="D"> D) {{ q.choice_d }}</label>
+  </fieldset>
+  {% else %}<p>No questions yet.</p>{% endfor %}
+  <button class="btn" type="submit">Submit Quiz</button>
+</form>
+{% else %}
+<p class="muted">Login as a student to take the quiz.</p>
+{% endif %}
+
+{% if current_user and current_user.role == 'teacher' and results %}
+<hr>
+<h2>Results</h2>
+<table class="table">
+  <thead><tr><th>Student</th><th>Submitted</th><th>Score</th></tr></thead>
+  <tbody>
+  {% for r in results %}
+    <tr><td>{{ r.student_name }}</td><td>{{ r.submitted_at[:16].replace('T',' ') }}</td><td>{{ '%.0f'|format(r.score) }}%</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

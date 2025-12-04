@@ -1,0 +1,13 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Dashboard</h1>
+<div class="grid">
+  <div class="stat card"><div class="stat-number">{{ ann_count }}</div><div class="stat-label">Announcements</div></div>
+  <div class="stat card"><div class="stat-number">{{ asg_count }}</div><div class="stat-label">Assignments</div></div>
+  <div class="stat card"><div class="stat-number">{{ quiz_count }}</div><div class="stat-label">Quizzes</div></div>
+  {% if avg_grade is not none %}
+    <div class="stat card"><div class="stat-number">{{ '%.0f'|format(avg_grade) }}%</div><div class="stat-label">Avg Assignment Score</div></div>
+  {% endif %}
+</div>
+{% endblock %}

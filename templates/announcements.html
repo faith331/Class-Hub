@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Announcements</h1>
+{% if current_user and current_user.role == 'teacher' %}
+  <form method="post" action="{{ url_for('announcement_new') }}" class="form card">
+    <input type="hidden" name="title" value="Announcement">
+    <label>Message
+      <textarea name="body" rows="3" placeholder="Type a short announcement..." required></textarea>
+    </label>
+    <button class="btn" type="submit">Post Announcement</button>
+    <a class="btn secondary" href="{{ url_for('announcement_new') }}">Advanced</a>
+  </form>
+{% endif %}
+<ul class="list">
+  {% for a in rows %}
+    <li class="list-item">
+      <div><strong>{{ a.title }}</strong></div>
+      <div class="muted">{{ a.created_at[:16].replace('T',' ') }}</div>
+      <p>{{ a.body }}</p>
+    </li>
+  {% else %}<li>No announcements yet.</li>{% endfor %}
+</ul>
+{% endblock %}
